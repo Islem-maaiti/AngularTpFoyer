@@ -1,0 +1,45 @@
+<div class="container mt-5">
+    <h2 class="text-center">Reservation Management</h2>
+
+    <!-- Form for adding/updating reservations -->
+    <form [formGroup]="reservationForm" (ngSubmit)="isEditMode ? updateReservation() : addReservation()" class="mb-4">
+      <div class="mb-3">
+        <label for="id" class="form-label">Reservation ID:</label>
+        <input id="id" formControlName="idReservation" class="form-control" required>
+        <div *ngIf="reservationForm.get('idReservation')?.invalid && (reservationForm.get('idReservation')?.touched || reservationForm.get('idReservation')?.dirty)" class="text-danger">
+          Reservation ID is required.
+        </div>
+      </div>
+      <div class="mb-3">
+        <label for="year" class="form-label">Academic Year:</label>
+        <input id="year" type="date" formControlName="anneeUniversitaire" class="form-control" required>
+        <div *ngIf="reservationForm.get('anneeUniversitaire')?.invalid && (reservationForm.get('anneeUniversitaire')?.touched || reservationForm.get('anneeUniversitaire')?.dirty)" class="text-danger">
+          Academic Year is required.
+        </div>
+      </div>
+      <div class="mb-3">
+        <label for="valid" class="form-label">Is Valid:</label>
+        <input id="valid" type="checkbox" formControlName="estValide" class="form-check-input">
+      </div>
+
+      <button type="submit" class="btn btn-primary me-2" [disabled]="!reservationForm.valid">
+        {{ isEditMode ? 'Update Reservation' : 'Add Reservation' }}
+      </button>
+      <button type="button" class="btn btn-secondary" *ngIf="isEditMode" (click)="cancelEdit()">Cancel</button>
+    </form>
+
+    <!-- List of reservations -->
+    <h3>Reservations</h3>
+    <ul class="list-group">
+      <li *ngFor="let reservation of reservations" class="list-group-item d-flex justify-content-between align-items-center">
+        <div>
+          <strong>ID:</strong> {{ reservation.idReservation }} 
+          <span class="text-muted"> - Academic Year: {{ reservation.anneeUniversitaire | date: 'yyyy-MM-dd' }} (Valid: {{ reservation.estValide ? 'Yes' : 'No' }})</span>
+        </div>
+        <div>
+          <button class="btn btn-sm btn-outline-primary me-2" (click)="editReservation(reservation)">Edit</button>
+          <button class="btn btn-sm btn-outline-danger" (click)="deleteReservation(reservation.idReservation)">Delete</button>
+        </div>
+      </li>
+    </ul>
+</div>

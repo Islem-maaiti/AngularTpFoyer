@@ -1,0 +1,48 @@
+<div class="container mt-5">
+    <h2 class="text-center">Block Management</h2>
+  
+    <!-- Form for adding/updating blocks -->
+    <form [formGroup]="blocForm" (ngSubmit)="isEditMode ? updateBloc() : addBloc()" class="mb-4">
+      <div class="mb-3">
+        <label for="id" class="form-label">Block ID:</label>
+        <input id="id" formControlName="idBloc" class="form-control" required>
+        <div *ngIf="blocForm.get('idBloc')?.invalid && (blocForm.get('idBloc')?.touched || blocForm.get('idBloc')?.dirty)" class="text-danger">
+          Block ID is required.
+        </div>
+      </div>
+      <div class="mb-3">
+        <label for="name" class="form-label">Block Name:</label>
+        <input id="name" formControlName="nomBloc" class="form-control" required>
+        <div *ngIf="blocForm.get('nomBloc')?.invalid && (blocForm.get('nomBloc')?.touched || blocForm.get('nomBloc')?.dirty)" class="text-danger">
+          Block Name is required.
+        </div>
+      </div>
+      <div class="mb-3">
+        <label for="capacity" class="form-label">Block Capacity:</label>
+        <input id="capacity" type="number" formControlName="capaciteBloc" class="form-control" required>
+        <div *ngIf="blocForm.get('capaciteBloc')?.invalid && (blocForm.get('capaciteBloc')?.touched || blocForm.get('capaciteBloc')?.dirty)" class="text-danger">
+          Block Capacity is required and must be greater than 0.
+        </div>
+      </div>
+  
+      <button type="submit" class="btn btn-primary me-2" [disabled]="!blocForm.valid">
+        {{ isEditMode ? 'Update Block' : 'Add Block' }}
+      </button>
+      <button type="button" class="btn btn-secondary" *ngIf="isEditMode" (click)="cancelEdit()">Cancel</button>
+    </form>
+  
+    <!-- List of blocks -->
+    <h3>Blocks</h3>
+    <ul class="list-group">
+      <li *ngFor="let bloc of blocs" class="list-group-item d-flex justify-content-between align-items-center">
+        <div>
+          <strong>ID:</strong> {{ bloc.idBloc }} 
+          <span class="text-muted"> - Name: {{ bloc.nomBloc }} (Capacity: {{ bloc.capaciteBloc }})</span>
+        </div>
+        <div>
+          <button class="btn btn-sm btn-outline-primary me-2" (click)="editBloc(bloc)">Edit</button>
+          <button class="btn btn-sm btn-outline-danger" (click)="deleteBloc(bloc.idBloc)">Delete</button>
+        </div>
+      </li>
+    </ul>
+</div>
